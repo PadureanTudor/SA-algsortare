@@ -6,26 +6,32 @@
 
 namespace Algs {
     enum Type {
-        BUBBLE_SORT
+        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, QUICK_SORT, MERGE_SORT
     };
-    const Type All[] = {BUBBLE_SORT};
-    const std::string AllChar[] = {"Bubble Sort"};
+    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT};
+    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort"};
     const int Count = sizeof(All) / sizeof(Type); 
 }
 
 #include "generare_input.cpp"
 #include "algoritmi.cpp"
 
-bool ordCrescatoare(int a, int b) {
-    return a < b;
-}
-
 void task(int input[], int size, Algs::Type algoritm) {
     switch(algoritm) {
         case Algs::Type::BUBBLE_SORT:
-            bubbleSort(input, size, ordCrescatoare);
+            bubbleSort(input, size);
+            break;
+        case Algs::Type::INSERTION_SORT:
+            insertionSort(input, size);
+            break;
+        case Algs::Type::SELECTION_SORT:
+            selectionSort(input, size);
+            break;
+        case Algs::Type::MERGE_SORT:
+            quickSort(input, size);
             break;
         default:
+            std::cerr << "Imposibil!";
             exit(1);
     }
 }

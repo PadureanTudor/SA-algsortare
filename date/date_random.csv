@@ -1,5 +1,2 @@
-Run Length,Bubble Sort,
-10,3.487e-07,
-20,1.1551e-06,
-50,5.54e-06,
-10000,0.126538,
+Run Length,Bubble Sort,Insertion Sort,Selection Sort,Quick Sort,
+10,4.73472e-07,8.37986e-08,1.80771e-07,1.41026e-07,
