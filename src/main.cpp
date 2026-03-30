@@ -1,46 +1,19 @@
+#include <algorithm>
+#include <cstring>
 #include <format>
 #include <fstream>
 #include <iostream>
 #include <chrono>
 #include <string>
 
-namespace Algs {
-    enum Type {
-        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, QUICK_SORT, MERGE_SORT
-    };
-    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT};
-    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort"};
-    const int Count = sizeof(All) / sizeof(Type); 
-}
-
 #include "generare_input.cpp"
 #include "algoritmi.cpp"
-
-void task(int input[], int size, Algs::Type algoritm) {
-    switch(algoritm) {
-        case Algs::Type::BUBBLE_SORT:
-            bubbleSort(input, size);
-            break;
-        case Algs::Type::INSERTION_SORT:
-            insertionSort(input, size);
-            break;
-        case Algs::Type::SELECTION_SORT:
-            selectionSort(input, size);
-            break;
-        case Algs::Type::MERGE_SORT:
-            quickSort(input, size);
-            break;
-        default:
-            std::cerr << "Imposibil!";
-            exit(1);
-    }
-}
 
 int main() {
     static std::chrono::high_resolution_clock clock;
 
     for(int inputTypeI = 0; inputTypeI < Inputset::TypeCount; inputTypeI++) {
-        std::string fileName = std::format("../date/date_{}.csv", Inputset::AllTypesChar[inputTypeI]);
+        std::string fileName = std::format("../../date/date_{}.csv", Inputset::AllTypesChar[inputTypeI]);
         std::ofstream fout(fileName);
 
         // Print header
@@ -62,13 +35,19 @@ int main() {
                 int *input = generareInput(inputLen, Inputset::AllTypes[inputTypeI]);
                 
                 for(int i = 0; i < Algs::Count; i++) {
+                    int *input_aux = new int[inputLen];
+                    memcpy(input_aux, input, sizeof(int) * inputLen);
+
                     auto start = clock.now();
                     
-                    task(input, inputLen, Algs::All[i]);
+                    // TODO: ???
+                    task(input_aux, inputLen, Algs::All[i]);
 
                     auto end = clock.now();
                     auto elapsed_seconds = std::chrono::duration<double>(end - start).count();
                     totalTime[i] += elapsed_seconds;
+
+                    delete[] input_aux;
                 }
                 
                 delete[] input;

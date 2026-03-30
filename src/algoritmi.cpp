@@ -1,5 +1,19 @@
+#pragma once
+
+#include <iostream>
 #include <limits>
 #include <utility>
+#include <string>
+#include <vector>
+
+namespace Algs {
+    enum Type {
+        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT
+    };
+    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT};
+    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort"};
+    const int Count = sizeof(All) / sizeof(Type); 
+}
 
 void bubbleSort(int v[], int size) {
     bool swapped;
@@ -20,60 +34,146 @@ void bubbleSort(int v[], int size) {
 }
 
 void insertionSort(int v[], int size) {
-    for(int i = 2; i < size; i++) {
-        v[0] = v[i];
-        int j = i-1;
-        while(v[0] < v[j]) {
+    for(int i = 1; i < size; i++) {
+        int k = v[i];
+        int j = i - 1;
+
+        while(j >= 0 && v[j] > k) {
             v[j+1] = v[j];
             j--;
-        } 
-        v[j+1] = v[0];
+        }
+        v[j+1] = k;
     }
 }
 
 void selectionSort(int v[], int size) {
     for(int i = 0; i < size-1; i++) {
-        int minim = std::numeric_limits<int>::max(), mink = -1;
+        int minim = v[i], mink = i;
         for(int j = i+1; j < size; j++) {
-            if(v[i] < minim) {
-                minim = v[i];
+            if(v[j] < minim) {
+                minim = v[j];
                 mink = j;
             } 
         }
-        if(mink != -1) {
+        if(mink != i) {
             std::swap(v[i], v[mink]);
         }
     }
 }
 
+int hoarePartition(int a[], int low, int high)
+{
+    int pivot = a[low];
+    int i = low - 1;
+    int j = high + 1;
+    while (1)
+    {
+        do {
+            i++;
+        } while (a[i] < pivot);
+ 
+        do {
+            j--;
+        } while (a[j] > pivot);
+ 
+        if (i >= j) {
+            return j;
+        }
+ 
+        std::swap(a[i], a[j]);
+    }
+}
+
 void quickSortWorker(int v[], int st, int dr) {
-    if(dr-st == 0) {
+    if(dr-st <= 0) {
         return;
     }
 
-    int pivot = v[st];
-    int i = st-1, j = dr+1;
-    for(;;) {
-        do {
-            i++;
-        } while(v[i] < pivot);
-        do {
-            j--;
-        } while(v[j] > pivot);
+    int pivot = hoarePartition(v, st, dr);
 
-        if(i >= j) {
-            break;
-        }
-
-        std::swap(v[i], v[j]);
-    }
-
-
-    quickSortWorker(v, st, j);
-    quickSortWorker(v, j+1, dr);
+    quickSortWorker(v, st, pivot);
+    quickSortWorker(v, pivot+1, dr);
 }
 
 void quickSort(int v[], int size) {
-    quickSortWorker(v, 0, size);
+    quickSortWorker(v, 0, size-1);
 }
 
+void merge(int v[], int st, int dr) {
+    int mij = (st+dr)/2;
+    int n1 = mij - st + 1;
+    int n2 = dr - mij;
+
+    int *v1 = new int[n1];
+    int *v2 = new int[n2];
+
+    for (int i = 0; i < n1; i++)
+        v1[i] = v[st + i];
+    for (int j = 0; j < n2; j++)
+        v2[j] = v[mij + j + 1];
+
+    int i = 0, j = 0;
+    int k = st;
+
+    while (i < n1 && j < n2) {
+        if (v1[i] <= v2[j]) {
+            v[k] = v1[i];
+            i++;
+        }
+        else {
+            v[k] = v2[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        v[k] = v1[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        v[k] = v2[j];
+        j++;
+        k++;
+    }
+
+    delete[] v1;
+    delete[] v2;
+}
+
+void mergeSortWorker(int v[], int st, int dr) {
+    if(dr-st <= 0) { return; }
+
+    mergeSortWorker(v, st, (st+dr)/2);
+    mergeSortWorker(v, (st+dr)/2+1, dr);
+    merge(v, st, dr);
+}
+
+void mergeSort(int v[], int size) {
+    mergeSortWorker(v, 0, size-1);
+}
+
+void task(int input[], int size, Algs::Type algoritm) {
+    switch(algoritm) {
+        case Algs::Type::BUBBLE_SORT:
+            bubbleSort(input, size);
+            break;
+        case Algs::Type::INSERTION_SORT:
+            insertionSort(input, size);
+            break;
+        case Algs::Type::SELECTION_SORT:
+            selectionSort(input, size);
+            break;
+        case Algs::Type::MERGE_SORT:
+            mergeSort(input, size);
+            break;
+        case Algs::Type::QUICK_SORT:
+            quickSort(input, size);
+            break;
+        default:
+            std::cerr << "Imposibil!";
+            exit(1);
+    }
+}
