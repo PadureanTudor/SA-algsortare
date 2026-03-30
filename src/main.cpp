@@ -23,6 +23,10 @@ int main() {
         }
         fout << std::endl;
 
+        // Oprim algoritmii daca o executie dureaza >30s
+        bool shouldRun[Algs::Count];
+        for(int i = 0; i < Algs::Count; shouldRun[i++] = true);
+
         for(int inputLenI = 0; inputLenI < Inputset::LenCount; inputLenI++) {
             int inputLen = Inputset::Len[inputLenI];
             fout << inputLen << ",";
@@ -35,19 +39,28 @@ int main() {
                 int *input = generareInput(inputLen, Inputset::AllTypes[inputTypeI]);
                 
                 for(int i = 0; i < Algs::Count; i++) {
+                    if(!shouldRun[Algs::All[i]]) continue;
+                    if(Algs::All[i] == Algs::Type::COUNT_SORT 
+                        && Inputset::AllTypes[inputTypeI] != Inputset::NR_MICI)
+                        continue; // Rulam count sort doar pt nr mici
+
                     int *input_aux = new int[inputLen];
                     memcpy(input_aux, input, sizeof(int) * inputLen);
 
                     auto start = clock.now();
                     
-                    // TODO: ???
                     task(input_aux, inputLen, Algs::All[i]);
-
+                    
                     auto end = clock.now();
                     auto elapsed_seconds = std::chrono::duration<double>(end - start).count();
                     totalTime[i] += elapsed_seconds;
-
+                    
                     delete[] input_aux;
+
+                    if(elapsed_seconds > 30) {
+                        shouldRun[Algs::All[i]] = false;
+                        totalTime[i] = 0;
+                    }
                 }
                 
                 delete[] input;

@@ -4,6 +4,7 @@ set(AlgTests
     selection_test
     merge_test
     quick_test
+    count_test
 )
 
 foreach(TEST_NAME ${AlgTests})

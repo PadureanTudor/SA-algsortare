@@ -8,10 +8,10 @@
 
 namespace Algs {
     enum Type {
-        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT
+        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT
     };
-    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT};
-    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort"};
+    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT};
+    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort", "Count Sort"};
     const int Count = sizeof(All) / sizeof(Type); 
 }
 
@@ -155,6 +155,28 @@ void mergeSort(int v[], int size) {
     mergeSortWorker(v, 0, size-1);
 }
 
+void countSort(int v[], int size) {
+    int minim = std::numeric_limits<int>::max();
+    int maxim = std::numeric_limits<int>::min();
+    for(int i = 0; i < size; i++) {
+        minim = std::min(v[i], minim);
+        maxim = std::max(v[i], maxim);
+    }
+    int *frecv = new int[maxim-minim+1];
+    for(int i = 0; i < maxim-minim+1; frecv[i++] = 0);
+    for(int i = 0; i < size; i++) {
+        frecv[v[i]-minim]++;
+    }
+    int nv = 0;
+    for(int i = minim; i <= maxim; i++) {
+        while(frecv[i-minim] > 0) {
+            v[nv++] = i-minim;
+            frecv[i-minim]--;
+        }
+    }
+    delete[] frecv;
+}
+
 void task(int input[], int size, Algs::Type algoritm) {
     switch(algoritm) {
         case Algs::Type::BUBBLE_SORT:
@@ -171,6 +193,9 @@ void task(int input[], int size, Algs::Type algoritm) {
             break;
         case Algs::Type::QUICK_SORT:
             quickSort(input, size);
+            break;
+        case Algs::Type::COUNT_SORT:
+            countSort(input, size);
             break;
         default:
             std::cerr << "Imposibil!";
