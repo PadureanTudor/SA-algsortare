@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <random>
 
 #include "algoritmi.cpp"
@@ -12,8 +11,8 @@ namespace Inputset {
     };
     const Type AllTypes[] = {RANDOM, SORTAT, INVERS_SORTAT, NR_MICI, APROAPE_SORTAT};
     const std::string AllTypesChar[] = {"random", "sortat", "invers_sortat", "nr_mici", "aproape_sortat"};
-    const int Len[] = {10, 20, 50, 100, 1'000, 10'000, 100'000};
-    const int RunsPerLen[] = {10000, 10000, 5000, 1000, 500, 10, 1};
+    const int Len[] = {10, 20, 50, 100, 1'000, 10'000, 100'000, 250'000, 500'000, 1'000'000, 2'500'000, 5'000'000, 10'000'000};
+    const int RunsPerLen[] = {10000, 10000, 5000, 1000, 500, 10, 1, 1, 1, 1, 1, 1, 1};
     const int TypeCount = sizeof(AllTypes) / sizeof(AllTypes[0]);
     const int LenCount = sizeof(Len) / sizeof(Len[0]);
 }
@@ -58,19 +57,21 @@ int *inputNrMici(int size) {
     return rand;
 }
 
+void partialQuicksort(int v[], int st, int dr, int k) {
+    if(dr-st <= 0) {
+        return;
+    }
+
+    int pivot = hoarePartition(v, st, dr);
+
+    quickSortWorker(v, st, pivot);
+    if(pivot < k-1)
+        quickSortWorker(v, pivot+1, dr);
+}
+
 int *inputAproapeSortat(int size) {
     int *rand = inputRandom(size);
-    for(int i = 1; i < size; i++) {
-        int k = rand[i];
-        // Oprim sortarea mai devreme
-        int j = std::max(0, i - 2);
-
-        while(j >= 0 && rand[j] > k) {
-            rand[j+1] = rand[j];
-            j--;
-        }
-        rand[j+1] = k;
-    }
+    partialQuicksort(rand, 0, size-1, size * 4 / 5);
     return rand;
 }
 

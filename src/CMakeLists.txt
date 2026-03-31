@@ -16,8 +16,8 @@ add_executable(main_app
 )
 
 if (MSVC)
-    target_compile_options(main_app PRIVATE /W4)
+    target_compile_options(main_app PRIVATE /W4 /Ot)
 else()
-    target_compile_options(main_app PRIVATE -Wall -Wextra -Wpedantic -o0)
+    target_compile_options(main_app PRIVATE -Wall -Wextra -Wpedantic -O3)
 endif()
 

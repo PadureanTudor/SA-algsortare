@@ -4,7 +4,6 @@
 #include <limits>
 #include <utility>
 #include <string>
-#include <vector>
 
 namespace Algs {
     enum Type {
@@ -201,4 +200,6 @@ void task(int input[], int size, Algs::Type algoritm) {
             std::cerr << "Imposibil!";
             exit(1);
     }
+
+    delete[] input;
 }
