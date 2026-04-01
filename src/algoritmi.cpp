@@ -7,10 +7,10 @@
 
 namespace Algs {
     enum Type {
-        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT
+        BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT, RADIX_SORT
     };
-    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT};
-    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort", "Count Sort"};
+    const Type All[] = {BUBBLE_SORT, INSERTION_SORT, SELECTION_SORT, MERGE_SORT, QUICK_SORT, COUNT_SORT, RADIX_SORT};
+    const std::string AllChar[] = {"Bubble Sort", "Insertion Sort", "Selection Sort", "Merge Sort", "Quick Sort", "Count Sort", "Radix Sort"};
     const int Count = sizeof(All) / sizeof(Type); 
 }
 
@@ -176,6 +176,65 @@ void countSort(int v[], int size) {
     delete[] frecv;
 }
 
+int getMax(int v[], int n) {
+    int mx = v[0];
+    for (int i = 1; i < n; i++)
+        if (v[i] > mx)
+            mx = v[i];
+    return mx;
+}
+
+void countSortDigit(long long v[], int n, long long exp) {
+    long long *output = new long long[n];
+    int count[10] = {0};
+
+    for (int i = 0; i < n; i++)
+        count[(v[i] / exp) % 10]++;
+
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(v[i] / exp) % 10] - 1] = v[i];
+        count[(v[i] / exp) % 10]--;
+    }
+
+    for (int i = 0; i < n; i++)
+        v[i] = output[i];
+
+    delete[] output;
+}
+
+void radixSort(int v[], int n) {
+    if (n <= 1) return;
+
+    // Use long long to prevent overflow during subtraction/offsetting
+    long long min_val = v[0];
+    long long max_val = v[0];
+
+    for (int i = 1; i < n; i++) {
+        if (v[i] < min_val) min_val = v[i];
+        if (v[i] > max_val) max_val = v[i];
+    }
+
+    long long *shifted = new long long[n]; 
+    for (int i = 0; i < n; i++) {
+        shifted[i] = (long long)v[i] - min_val;
+    }
+
+    long long range_max = (long long)max_val - min_val;
+
+    for (long long exp = 1; range_max / exp > 0; exp *= 10) {
+        countSortDigit(shifted, n, exp);
+    }
+
+    for (int i = 0; i < n; i++) {
+        v[i] = (int)(shifted[i] + min_val);
+    }
+
+    delete[] shifted;
+}
+
 void task(int input[], int size, Algs::Type algoritm) {
     switch(algoritm) {
         case Algs::Type::BUBBLE_SORT:
@@ -195,6 +254,9 @@ void task(int input[], int size, Algs::Type algoritm) {
             break;
         case Algs::Type::COUNT_SORT:
             countSort(input, size);
+            break;
+        case Algs::Type::RADIX_SORT:
+            radixSort(input, size);
             break;
         default:
             std::cerr << "Imposibil!";

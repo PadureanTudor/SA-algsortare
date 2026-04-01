@@ -12,7 +12,7 @@ namespace Inputset {
     const Type AllTypes[] = {RANDOM, SORTAT, INVERS_SORTAT, NR_MICI, APROAPE_SORTAT};
     const std::string AllTypesChar[] = {"random", "sortat", "invers_sortat", "nr_mici", "aproape_sortat"};
     const int Len[] = {10, 20, 50, 100, 1'000, 10'000, 100'000, 250'000, 500'000, 1'000'000, 2'500'000, 5'000'000, 10'000'000};
-    const int RunsPerLen[] = {10000, 10000, 5000, 1000, 500, 10, 1, 1, 1, 1, 1, 1, 1};
+    const int RunsPerLen[] = {10000, 10000, 5000, 1000, 500, 10, 5, 5, 5, 5, 5, 5, 5};
     const int TypeCount = sizeof(AllTypes) / sizeof(AllTypes[0]);
     const int LenCount = sizeof(Len) / sizeof(Len[0]);
 }
