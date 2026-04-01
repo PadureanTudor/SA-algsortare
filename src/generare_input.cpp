@@ -71,7 +71,7 @@ void partialQuicksort(int v[], int st, int dr, int k) {
 
 int *inputAproapeSortat(int size) {
     int *rand = inputRandom(size);
-    partialQuicksort(rand, 0, size-1, size * 4 / 5);
+    partialQuicksort(rand, 0, size-1, size - 2);
     return rand;
 }
 

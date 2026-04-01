@@ -56,6 +56,7 @@ void mainWorker(int inputTypeI) {
 
                 if(elapsed_seconds > 30) {
                     isTimedOut[Algs::All[i]] = true;
+                    totalTime[i] = 0;
                 }
             }
             
