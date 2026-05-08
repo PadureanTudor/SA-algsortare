@@ -42,7 +42,7 @@ int* inputSortat(int size) {
 int *inputInvSortat(int size) {
     int *sortat = inputSortat(size);
     int *v = new int[size];
-    for(int i = 0; i < size / 2; i++) {
+    for(int i = 0; i < size; i++) {
         v[i] = sortat[size-i-1];
     }
     delete[] sortat;
@@ -71,7 +71,7 @@ void partialQuicksort(int v[], int st, int dr, int k) {
 
 int *inputAproapeSortat(int size) {
     int *rand = inputRandom(size);
-    partialQuicksort(rand, 0, size-1, size - 2);
+    partialQuicksort(rand, 0, size * 4 / 5, size - 2);
     return rand;
 }
 
@@ -88,5 +88,7 @@ int* generareInput(int size, Inputset::Type tip) {
         case Inputset::Type::APROAPE_SORTAT:
             return inputAproapeSortat(size);
     }
+    std::cerr << "Imposibil";
+    return nullptr;
 }
 

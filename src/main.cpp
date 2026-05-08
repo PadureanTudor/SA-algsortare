@@ -10,8 +10,6 @@
 #include "algoritmi.cpp"
 
 void mainWorker(int inputTypeI) {
-    static std::chrono::high_resolution_clock clock;
-
     std::string fileName = std::format("../../date/date_{}.csv", Inputset::AllTypesChar[inputTypeI]);
     std::ofstream fout(fileName);
 
@@ -32,7 +30,7 @@ void mainWorker(int inputTypeI) {
 
         // Stocam timpul pentru toti algoritmii
         double totalTime[Algs::Count];
-        for(int i = 0; i < Algs::Count; totalTime[i++] = 0);
+        for(int i = 0; i < Algs::Count; totalTime[i++] = 0) {}
 
         for(int runs = 0; runs < Inputset::RunsPerLen[inputLenI]; runs++) {
             int *input = generareInput(inputLen, Inputset::AllTypes[inputTypeI]);
@@ -46,11 +44,12 @@ void mainWorker(int inputTypeI) {
                 int *input_aux = new int[inputLen];
                 memcpy(input_aux, input, sizeof(int) * inputLen);
 
-                auto start = clock.now();
+                auto start = std::chrono::high_resolution_clock::now();
                 
                 task(input_aux, inputLen, Algs::All[i]);
+                delete[] input_aux;
                 
-                auto end = clock.now();
+                auto end = std::chrono::high_resolution_clock::now();
                 auto elapsed_seconds = std::chrono::duration<double>(end - start).count();
                 totalTime[i] += elapsed_seconds;                
 

@@ -14,5 +14,6 @@ int main() {
             return 1;
         }
     }
+    delete[] input;
     return 0;
 }

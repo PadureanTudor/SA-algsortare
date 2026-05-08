@@ -15,10 +15,8 @@ namespace Algs {
 }
 
 void bubbleSort(int v[], int size) {
-    bool swapped;
-  
     for (int i = 0; i < size - 1; i++) {
-        swapped = false;
+        bool swapped = false;
         for (int j = 0; j < size - i - 1; j++) {
             if (v[j] > v[j + 1]) {
                 std::swap(v[j], v[j + 1]);
@@ -65,7 +63,7 @@ int hoarePartition(int a[], int low, int high)
     int pivot = a[low];
     int i = low - 1;
     int j = high + 1;
-    while (1)
+    while (true)
     {
         do {
             i++;
@@ -262,6 +260,4 @@ void task(int input[], int size, Algs::Type algoritm) {
             std::cerr << "Imposibil!";
             exit(1);
     }
-
-    delete[] input;
 }
